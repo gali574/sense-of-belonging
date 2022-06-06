@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="../dist/jspsych.js"></script>
+    <script src="../dist/plugin-fullscreen.js"></script>
+    <script src="../dist/plugin-html-keyboard-response.js"></script>
+    <script src="../dist/plugin-survey-text.js"></script>
+    <script src="../dist/plugin-survey-likert.js"></script>
+    <script src="../dist/plugin-html-button-response.js"></script>
+    <script src="../dist/plugin-survey-multi-choice.js"></script>
+    <script src="../dist/plugin-html-slider-response.js"></script>
+    <script src="../dist/plugin-instructions.js"></script>
+    <link rel="stylesheet" href="../dist/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+
+    var fullscreen_trial = {
+      type: jsPsychFullscreen,
+      fullscreen_mode: true,
+      message: '<p>この実験は全画面モードが必要ですので、下のボタンをクリックして、全画面モードにしてください。</p>',
+      button_label: '次へ'
+    };
+
+    var intro = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: [
+              '<p>私たちは大学の研究グループで、SNSにおける人の行動について調べています。</p><p>この調査は、その資料として、皆さんの考え方をおうかがいするものです。</p>'+
+              '<p>このアンケートは、学術的な研究を目的とするとともに、人々がお互いの気持ちを理解したり、より良い人間関係を作るために役立てるようにする目的があります。</p>'+
+              '<p>ですから、皆さんがそれぞれの質問について、考えている通りに答えていただくことが、とても重要です。</p>'+
+              '<p>どうかアンケートの趣旨をご理解いただき、ご協力をよろしくお願いいたします。</p>'+
+              '<p>回答の所要時間には個人差がありますが、5-8分程度を予定しています。</p>'+
+              '<br></br>'+
+              '<p>次に、下記の説明をよく読んでください。これらを読んで、同意いただける場合は、<span style="color:#FF0000">「J」キー</span>をおしてください。</p>'+
+              '<p>1.アンケートの回答に同意するかは、あなたの自由で、途中でいつでも取りやめること（ESCキー）ができます。</p>'+
+              '<p>2.この調査では、あなた自身のことなどについてお尋ねする項目があります。ストレスは大きくないと考えられますが、回答中、体調不良などにより、回答を続けられない時は、いつでも取りやめることができます（ただし、途中で取りやめた場合には、謝礼を受け取ることができません）。</p>'+
+              '<p>3.回答は、匿名化により個人情報の保護に厳重に留意した上で、大学の規則に基づいて大学内に保管します。</p>'+
+              '<p>4.回答結果は、研究のためのみに用いられます。結果を個別にお知らせすることは原則として予定していません。</p>'+
+              '<p>5.本研究によって得られたデータは、個人情報を削除した上で公開することがあります。また、これらのデータ、研究成果の知的財産権については、あなたにその権利は生じません。</p>'
+        ],
+      choices: ["j"],
+    };
+
+    //demographic variables
+    var ID = {
+      type: jsPsychSurveyText,
+      questions: [
+        {prompt: 'あなた参加者IDを入力ください。', columns: 10, required: true, name: 'parID'},],
+      button_label: '次へ',
+    };
+
+    var age = {
+      type: jsPsychSurveyText,
+      questions: [
+        {prompt: 'あなたの年齢をお知らせください。', columns: 10, required: true, name: 'age'},],
+      button_label: '次へ',
+    };
+
+    var other_demographic = {
+      type: jsPsychSurveyMultiChoice,
+      questions: [
+      {prompt: "あなたの性別をお知らせください。", name: 'sex', options: ['男性', '女性'], required: true, horizontal: true},
+      {prompt: "あなたは学生ですか", name: 'job', options: ['はい', 'いいえ'], required: true, horizontal: true},
+      {prompt: "あなたは結婚していますか？", name: 'marriage', options: ['はい', 'いいえ'], required: true, horizontal: true},
+      {prompt: "あなたには子供がいますか？", name: 'kid', options: ['はい', 'いいえ'], required: true, horizontal: true},
+      {prompt: "Twitterにおいて、直接会ったことのない人をフォローしますか？", name: 'meetstrangers', options: ['はい', 'いいえ'], required: true, horizontal: true},
+      ],
+      button_label: '次へ',
+      
+    };
+
+    //different groups
+    var prime = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: [
+              '<p>以下の文章を読んで、述べた情景を想像してください。できましたら，<span style="color:#FF0000">「J」キー</span>をおしてください</p>'+
+              '<br></br>'+
+              '<p>あなたはTwitterを利用しているうちに，結構前からほかの五人の利用者を相互フォローして，コミュニケーションがよくできています。</p>'+
+              '<p>まるで，小さなコミュニティーを結成しています。このコミュニティーの中に，あなたを含めて，すべての利用者はお互いに尊重しており，楽しんでやりとりことも簡単にできています。</p>'+
+              '<p>ここにおいて，あなたはほかの利用者が自分の仲間のように感じられています。</p>' 
+        ],
+      choices: ["j"],
+    };
+
+    //sense of belonging
+    var SoBinstruction = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: [
+                '<p>つぎは、前述のTwitterコミュニティーについておうかがいします。</p>'+
+                '<p>あなたの行動や気持ちにどのくらいあてはまるか，「あてはまらない」から「あてはまる」までのいずれかを選択してください。</p>'+
+                '<p>1は「あてはまらない」で、4は「あてはまる」です。</p>'+ 
+                '<p>以上の説明を理解してもらえましたら、<span style="color:#FF0000">「J」キー</span>を押してください。</p>'
+        ],
+      choices: ["j"],
+    };
+
+    var likert_scale = [
+      "あてはまらない", 
+      "あまりあてはまらない", 
+      "ややあてはまる", 
+      "あてはまる", 
+    ];
+
+    var SoB_1 = {
+      type: jsPsychSurveyLikert,
+      questions: [
+      {prompt: "このコミュニティーにおけるグループの一員として、自分を迎え入れてもらいやすい。", name: '1', labels: likert_scale, required: true},
+      {prompt: "このコミュニティーで「自分には仲間がいる」という安心感が得られる。", name: '2', labels: likert_scale, required: true},
+      {prompt: "このコミュニティーには、自分の居場所があると感じられる。", name: '3', labels: likert_scale, required: true},
+      {prompt: "このコミュニティーで表面的ではない人間関係を結ぶことができる。", name: '4', labels: likert_scale, required: true},
+      {prompt: "このコミュニティーの中で、仲間意識を感じることができる。", name: '5', labels: likert_scale, required: true},
+      ],
+      randomize_question_order: true,
+      button_label: "次へ"
+    };
+
+    var SoB_2 = {
+      type: jsPsychSurveyLikert,
+      questions: [
+      {prompt: "このコミュニティーでは気楽にやりとりをして楽しむことができる。", name: '6', labels: likert_scale, required: true},
+      {prompt: "自分のことを認めてくれる相手とこのコミュニティーで出会うことができる。", name: '7', labels: likert_scale, required: true},
+      {prompt: "この質問は「ややあてはまる」を選択してください。", name: 'check', labels: likert_scale, required: true},
+      {prompt: "緊張せずに、ほかの人とこのコミュニティーでやりとりができる。", name: '8', labels: likert_scale, required: true},
+      {prompt: "このコミュニティーでは簡単に友人関係を作ることができる。", name: '9', labels: likert_scale, required: true},
+      ],
+      randomize_question_order: true,
+      button_label: "次へ"
+    }; 
+
+    //feedbacks
+    
+    
+    
+    //positive feedback perception & self-disclosure willingness
+    var positive = {
+      type: jsPsychHtmlSliderResponse,
+      stimulus: ['あなたの先ほど提示した投稿のポジティブなフィードバック（「いいね！」を受けること）を受け取る頻度を、'+
+                 '「全くない」から「頻繁」までのいずれかを選択してください。'+
+                 '（1 = 全くない，10 = 頻繁）',],
+      labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      min: 1, max: 10, slider_start: 5,
+      button_label: "次へ",
+      require_movement: true
+    };
+
+    var selfdis = {
+      type: jsPsychHtmlSliderResponse,
+      stimulus: ['あなたはこれから、このTwitter コミュニティーにおいて、どれくらい自分自身について投稿したいのかを、'+
+                 '「全然したくない」から「とても投稿したい」までのいずれかを選択してください。'+
+                 '（1 = 全然したくない，10 = とても投稿したい）',],
+      labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      min: 1, max: 10, slider_start: 5,
+      button_label: "次へ",
+      require_movement: true
+    };
+
+    var exit = {
+      type: jsPsychInstructions,
+      pages: ['<p>実験はこれで終わりになります。</p><p>ご協力ありがとうございました。</p><p>ESCキーを押して、ウインドウを閉じてください</p>'],
+      show_clickable_nav: false
+    };
+    
+    var main_timeline = [fullscreen_trial, intro, ID, age, other_demographic, prime, SoBinstruction, SoB_1, SoB_2, positive, selfdis, exit];
+
+    var running = initJsPsych({
+      timeline: main_timeline,
+      on_finish: function(){
+        jsPsych.data.addProperties(par_info);
+        jsPsych.data.get().localSave('csv', 'data.csv'); 
+      },
+    })
+
+  </script>
+</html>
